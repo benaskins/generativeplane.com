@@ -32,5 +32,33 @@
 <div class="lbl">Generative Plane</div>
 <div class="lbl">&copy; Benjamin Askins 2026</div>
 </footer>
+
+<nav class="webring">
+  <a class="webring-prev" href="#">&#8592;</a>
+  <span class="webring-name">generativeplane</span>
+  <a class="webring-next" href="#">&#8594;</a>
+</nav>
+<script>
+(function() {
+  var ring = [
+    { name: 'benjaminaskins', url: 'https://benjaminaskins.com' },
+    { name: 'genlevel', url: 'https://genlevel.com' },
+    { name: 'generativeplane', url: 'https://generativeplane.com' },
+    { name: 'isitconscious', url: 'https://isitconscious.xyz' }
+  ];
+  var host = location.hostname.replace('www.', '');
+  var idx = ring.findIndex(function(s) { return host.indexOf(s.name) !== -1; });
+  if (idx === -1) idx = 0;
+  var prev = ring[(idx - 1 + ring.length) % ring.length];
+  var next = ring[(idx + 1) % ring.length];
+  var nav = document.querySelector('.webring');
+  nav.querySelector('.webring-prev').href = prev.url;
+  nav.querySelector('.webring-prev').textContent = '\u2190 ' + prev.name;
+  nav.querySelector('.webring-next').href = next.url;
+  nav.querySelector('.webring-next').textContent = next.name + ' \u2192';
+  nav.querySelector('.webring-name').textContent = ring[idx].name;
+})();
+</script>
+
 </body>
 </html>
