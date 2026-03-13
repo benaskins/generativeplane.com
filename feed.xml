@@ -4,13 +4,27 @@
     <title>Generative Plane</title>
     <link>https://generativeplane.com</link>
     <description>Posts by Benjamin Askins</description>
-    <lastBuildDate>Fri, 13 Mar 2026 07:10:54 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 13 Mar 2026 08:04:05 +0000</lastBuildDate>
     <item>
-      <title>hello from the generative plane</title>
-      <link>https://generativeplane.com/posts/984ce601-d181-49cd-8c7d-c188f2e4a94d</link>
-      <description>hello from the generative plane</description>
-      <pubDate>Fri, 13 Mar 2026 07:10:54 +0000</pubDate>
-      <guid>https://generativeplane.com/posts/984ce601-d181-49cd-8c7d-c188f2e4a94d</guid>
+      <title>this should be a draft</title>
+      <link>https://generativeplane.com/posts/82885ac6-b783-4c45-b33b-18e70304dc39</link>
+      <description>this should be a draft</description>
+      <pubDate>Fri, 13 Mar 2026 08:04:05 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/82885ac6-b783-4c45-b33b-18e70304dc39</guid>
+    </item>
+    <item>
+      <title>persistent test post</title>
+      <link>https://generativeplane.com/posts/d24c6c64-87e9-4a10-a2d9-dd2f1b0f560a</link>
+      <description>persistent test post</description>
+      <pubDate>Fri, 13 Mar 2026 07:51:30 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/d24c6c64-87e9-4a10-a2d9-dd2f1b0f560a</guid>
+    </item>
+    <item>
+      <title>test syndication</title>
+      <link>https://generativeplane.com/posts/54b96e1e-595c-4aa3-a243-f0b71f372bcc</link>
+      <description>test syndication</description>
+      <pubDate>Fri, 13 Mar 2026 07:51:22 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/54b96e1e-595c-4aa3-a243-f0b71f372bcc</guid>
     </item>
   </channel>
 </rss>
