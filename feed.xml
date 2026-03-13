@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+  <channel>
+    <title>Generative Plane</title>
+    <link>https://generativeplane.com</link>
+    <description>Posts by Benjamin Askins</description>
+    <lastBuildDate>Fri, 13 Mar 2026 11:02:16 +0000</lastBuildDate>
+    <item>
+      <title>Building a personal syndication pipeline in Go</title>
+      <link>https://generativeplane.com/posts/99c4b04a-fbd6-4a1d-9135-b346e1a420fb</link>
+      <description>I wanted a simple publishing workflow: write a post, review it, publish to my own site, and syndicate copies to Bluesky and Mastodon. No CMS, no third-party service, just a CLI tool backed by event sourcing and a static site.</description>
+      <pubDate>Fri, 13 Mar 2026 10:56:39 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/99c4b04a-fbd6-4a1d-9135-b346e1a420fb</guid>
+    </item>
+    <item>
+      <title>Building a personal syndication pipeline in Go</title>
+      <link>https://generativeplane.com/posts/679912f0-6334-4584-be26-cfab7f023898</link>
+      <description>I wanted a simple publishing workflow: write a post, review it, publish to my own site, and syndicate copies to Bluesky and Mastodon. No CMS, no third-party service, just a CLI tool backed by event sourcing and a static site.</description>
+      <pubDate>Fri, 13 Mar 2026 09:44:39 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/679912f0-6334-4584-be26-cfab7f023898</guid>
+    </item>
+  </channel>
+</rss>
