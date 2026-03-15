@@ -4,7 +4,7 @@
     <title>Generative Plane</title>
     <link>https://generativeplane.com</link>
     <description>Posts by Benjamin Askins</description>
-    <lastBuildDate>Sun, 15 Mar 2026 10:22:25 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Mar 2026 10:32:09 +0000</lastBuildDate>
     <item>
       <title>Week notes: March 9–15</title>
       <link>https://generativeplane.com/posts/7b4c5b55-d16b-434d-b4f3-83b0fd4759e1</link>
@@ -12,7 +12,7 @@
       <pubDate>Sun, 15 Mar 2026 09:42:45 +0000</pubDate>
       <guid>https://generativeplane.com/posts/7b4c5b55-d16b-434d-b4f3-83b0fd4759e1</guid>
     </item>
-<item>
+    <item>
       <title>Building a personal syndication pipeline in Go</title>
       <link>https://generativeplane.com/posts/99c4b04a-fbd6-4a1d-9135-b346e1a420fb</link>
       <description>I wanted a simple publishing workflow: write a post, review it, publish to my own site, and syndicate copies to Bluesky and Mastodon. No CMS, no third-party service, just a CLI tool backed by event sourcing and a static site.</description>
