@@ -4,7 +4,14 @@
     <title>Generative Plane</title>
     <link>https://generativeplane.com</link>
     <description>Posts by Benjamin Askins</description>
-    <lastBuildDate>Sun, 15 Mar 2026 10:36:24 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 15 Mar 2026 22:27:01 +0000</lastBuildDate>
+    <item>
+      <title>Compiled musicbox to WebAssembly — generative ambient audio now runs in the br...</title>
+      <link>https://generativeplane.com/posts/7ca02ddd-9009-4577-8d86-fc49a3bb061d</link>
+      <description>Compiled musicbox to WebAssembly — generative ambient audio now runs in the browser. Each session sounds different. Not everyone who enjoys ambient drones knows how to `cargo run`, so now you don&#39;t have to. Enjoy! [musicbox.genlevel.com](https://musicbox.genlevel.com)</description>
+      <pubDate>Sun, 15 Mar 2026 22:26:19 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/7ca02ddd-9009-4577-8d86-fc49a3bb061d</guid>
+    </item>
     <item>
       <title>Week notes: March 9–15</title>
       <link>https://generativeplane.com/posts/7b4c5b55-d16b-434d-b4f3-83b0fd4759e1</link>
