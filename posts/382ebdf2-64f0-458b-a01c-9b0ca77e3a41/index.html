@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>musicbox — Generative Plane</title>
+<meta property="og:title" content="musicbox">
+<meta property="og:description" content="Generative music brings my skills as a developer and a composer together for the first time. Here&#39;s how a Rust synthesizer became a browser-playable ambient instrument.">
+<meta property="og:url" content="https://generativeplane.com/posts/382ebdf2-64f0-458b-a01c-9b0ca77e3a41">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+<div class="wordmark"><a href="/">Generative Plane</a></div>
+</header>
+<hr class="divider">
+<main>
+<article>
+<time datetime="2026-03-15T05:56:20Z">2026-03-15</time>
+<h2>musicbox</h2>
+<div class="body long-form"><p>There's a difference between <em>generated</em> music and <em>generative</em> music, and it matters.</p>
+<p>Generated music — the kind that comes out of Suno or Udio — is prompt-driven. You describe what you want, a model produces a finished track, and you're done. It's impressive, and it's everywhere right now. But it's also a dead end in a sense: the output is fixed. You listen to it the way you'd listen to any recording. The machine composed it, but it doesn't <em>keep</em> composing.</p>
+<p>Generative music is something else. It's a system that produces music in real time, never repeating, always evolving. Brian Eno has been exploring this since the seventies. The composer doesn't write a song — they design a process. The process plays forever.</p>
+<p>I've been making electronic music as genlevel since the mid-nineties, and I've been writing software for just as long. But those two practices have always lived in separate rooms. The music was made in DAWs — Ableton, earlier in Reason, earlier still on hardware. The code was for work. Generative music is the first thing I've built that genuinely brings both disciplines together.</p>
+<h2>The Rust experiment</h2>
+<p>musicbox started as a weekend project: could I write a synthesizer from scratch in Rust, with no audio libraries beyond a driver to talk to the sound card?</p>
+<p>The answer turned out to be yes, and the result was more interesting than I expected. Four layers of sound — slow bass drones, filtered mid-range oscillators, a Dattorro plate reverb on the highs, and Karplus-Strong plucked strings triggered stochastically — all built from raw oscillators, delay lines, and filters. No samples, no presets, no DAW. Just math and a pentatonic scale.</p>
+<p>Every run is seeded randomly. The oscillators start at different phases, the envelopes drift at different rates, the plucks fire at random intervals. You press play and something unique emerges. Press play again and it's different. The system <em>is</em> the composition.</p>
+<p>What surprised me was the sound. I expected it to be thin and academic — the kind of thing that demonstrates a concept but doesn't actually sound good. Instead it sounds like something I'd want to listen to. The Dattorro reverb, ported from Mutable Instruments' Eurorack code, gives it genuine depth. The BBD delay emulation on the plucks adds warmth. It breathes.</p>
+<h2>From terminal to browser</h2>
+<p>For a few days, musicbox was a command-line program. <code>cargo run --release</code> and sound comes out of your speakers. Beautiful, but you'd need Rust installed to hear it.</p>
+<p>The DSP code had no platform dependencies — it was all pure computation on float buffers. So I split the project into a workspace: <code>musicbox-core</code> for the synthesis engine, <code>musicbox-cli</code> for the native audio driver. The core compiles to WebAssembly without modification. A thin JavaScript layer — an AudioWorklet that calls into the WASM module each audio frame — and suddenly it runs in a browser tab.</p>
+<p>The entire synth engine compiles to a 50KB WASM binary. It runs on phones.</p>
+<h2>The sigil</h2>
+<p>The genlevel sigil — a sine wave inscribed in a circle — became the natural visual identity for musicbox. When you press play, the static waveform morphs into a live oscilloscope driven by the actual audio output. The control points on the circle migrate down and coalesce at the bottom, like they're being drawn into the music. When you stop, everything drifts back to its resting state.</p>
+<p>It's a small thing, but it captures what I find satisfying about this project: the visuals and the audio are driven by the same system. Nothing is decorative. The wave you see is the wave you hear.</p>
+<h2>What's next</h2>
+<p>musicbox is a foundation. The DSP core is designed to accept parameter changes from any host — the browser is just one. The original plan includes LED strips driven by the same parameter space, motion input from accelerometers, and a physical enclosure in frosted perspex.</p>
+<p>But for now, you can <a href="https://musicbox.genlevel.com">listen to it in your browser</a>. Every play is unique. No two listens are the same.</p>
+</div>
+
+</article>
+</main>
+<hr class="divider">
+<footer>
+<div class="lbl">Generative Plane</div>
+<div class="lbl"><a href="/">all posts</a></div>
+</footer>
+
+<nav class="webring">
+  <a class="webring-prev" href="#">&#8592;</a>
+  <span class="webring-name">generativeplane</span>
+  <a class="webring-next" href="#">&#8594;</a>
+</nav>
+<script>
+(function() {
+  var ring = [
+    { name: 'benjaminaskins', url: 'https://benjaminaskins.com' },
+    { name: 'genlevel', url: 'https://genlevel.com' },
+    { name: 'generativeplane', url: 'https://generativeplane.com' },
+    { name: 'isitconscious', url: 'https://isitconscious.xyz' }
+  ];
+  var host = location.hostname.replace('www.', '');
+  var idx = ring.findIndex(function(s) { return host.indexOf(s.name) !== -1; });
+  if (idx === -1) idx = 0;
+  var prev = ring[(idx - 1 + ring.length) % ring.length];
+  var next = ring[(idx + 1) % ring.length];
+  var nav = document.querySelector('.webring');
+  nav.querySelector('.webring-prev').href = prev.url;
+  nav.querySelector('.webring-prev').textContent = '\u2190 ' + prev.name;
+  nav.querySelector('.webring-next').href = next.url;
+  nav.querySelector('.webring-next').textContent = next.name + ' \u2192';
+  nav.querySelector('.webring-name').textContent = ring[idx].name;
+})();
+</script>
+
+</body>
+</html>

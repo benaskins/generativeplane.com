@@ -124,9 +124,15 @@ synd serve                           # web UI + background worker
 <li>Bluesky <a href="https://atproto.com/">AT Protocol</a> and <a href="https://docs.joinmastodon.org/api/">Mastodon REST API</a> for syndication</li>
 </ul>
 <p>About 3,000 lines of non-test Go across the domain package and CLI.</p>
+<p><em>Update, March 15: I've since replaced GitHub Pages with <a href="https://pages.cloudflare.com/">Cloudflare Pages</a> direct upload. See the addendum below.</em></p>
 <h2>Is this simple?</h2>
 <p>I opened with the word &quot;simple&quot; and then described an event-sourced system with projections, background workers, and platform clients. That might seem like overkill for a blog. But the simplicity isn't in the line count — it's in the composability. Each axon module does one thing: axon-fact gives me event sourcing, axon-gate gives me approval tokens and notifications, axon-auth gives me passkey login. Assembling them into a publishing pipeline is mostly wiring.</p>
 <p>And because the publishing tools are CLI commands, the whole workflow is drivable by a CLI-based coding agent. This post was drafted, revised, and published from a <a href="https://docs.anthropic.com/en/docs/claude-code">Claude Code</a> session — <code>synd post</code>, review the draft on my phone, approve, done. The agent doesn't need a browser extension or an API integration to publish. It just runs a command. That's the kind of simple I was after.</p>
+<h2>Addendum: switching from GitHub Pages to Cloudflare Pages</h2>
+<p>Two days after publishing, I replaced GitHub Pages with Cloudflare Pages. The original pipeline pushed to a GitHub repo and relied on GitHub's built-in Pages deployment. That worked, but it introduced friction I didn't want to own.</p>
+<p>GitHub Pages was slow to provision SSL certificates for custom domains. I ran into repeated CNAME churn — deleting and re-creating the CNAME file across multiple sites in the same session just to get certs to pick up. GitHub Pages also constrains where it serves from (root or <code>/docs</code>), which forced file duplication in at least one repo. These aren't dealbreakers individually, but together they meant the deploy step — the part that should be invisible — kept demanding attention.</p>
+<p>Cloudflare Pages has a direct upload API. No GitHub integration, no build step on their side, no waiting for a webhook-triggered deploy. The pipeline hashes every file with BLAKE3, checks which ones Cloudflare already has, uploads the rest, and creates a deployment with a manifest. It's a pure HTTP flow implemented in Go — no dependency on <code>wrangler</code> or Node. The deploy function sits in axon-synd alongside <code>GitPublish</code>, called by the worker after the git push.</p>
+<p>The git push still happens. The repo is the source of truth and the deployment record. Cloudflare Pages is the serving layer. DNS was already delegated to Cloudflare, so the switch was adding a Pages project, pointing the CNAME at it, and wiring the deploy function into the worker. SSL provisioned immediately.</p>
 </div>
 
 </article>

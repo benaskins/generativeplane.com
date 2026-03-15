@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Week notes: March 9–15 — Generative Plane</title>
 <meta property="og:title" content="Week notes: March 9–15">
-<meta property="og:description" content="I&#39;ve been writing software for 37 years. For most of that time, getting a side project from idea to shipped meant weeks of evenings and weekends — fighting yak-shaves, losing momentum, abandoning half-finished things. Working with agents has changed that. Not because they wr...">
+<meta property="og:description" content="37 years writing software, and agents changed what I attempt. This week: a syndication pipeline, a browser synth, five websites, and platform-wide hardening.">
 <meta property="og:url" content="https://generativeplane.com/posts/7b4c5b55-d16b-434d-b4f3-83b0fd4759e1">
 <meta property="og:type" content="article">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -22,19 +22,7 @@
 <article>
 <time datetime="2026-03-15T09:41:28Z">2026-03-15</time>
 <h2>Week notes: March 9–15</h2>
-<div class="body long-form"><h1>Week notes: March 9–15</h1>
-<p>I've been writing software for 37 years. For most of that time, getting a side project from idea to shipped meant weeks of evenings and weekends — fighting yak-shaves, losing momentum, abandoning half-finished things. Working with agents has changed that. Not because they write the code for me, but because they eliminate the gaps where motivation dies. When the distance between &quot;I want to try this&quot; and &quot;it's running&quot; shrinks to hours instead of weeks, you stop filtering ideas by feasibility and start filtering by interest. That's a different kind of creative freedom.</p>
-<p>This week I shipped a lot. Here's the rundown.</p>
-<h2>axon-synd</h2>
-<p>The syndication pipeline that publishes this blog went from zero to production. Event-sourced post store backed by Postgres. Static site generator. Draft review with Signal notifications and approval tokens. CLI that talks to a server API. Syndication to Bluesky, Mastodon, and Threads. Blog redesign. About 40 commits.</p>
-<h2>musicbox</h2>
-<p>A generative ambient synth I wrote in Rust. This week I extracted a core library, built a WASM bridge, added an AudioWorklet-based browser frontend, fixed Safari/iOS compatibility, and wired up a live waveform visualisation that morphs from a static sigil. It's playable at <a href="https://musicbox.genlevel.com">musicbox.genlevel.com</a>.</p>
-<h2>Five websites</h2>
-<p>Launched <a href="https://benjaminaskins.com">benjaminaskins.com</a>, <a href="https://genlevel.com">genlevel.com</a>, <a href="https://isitconscious.xyz">isitconscious.xyz</a>, and <a href="https://sailorgrift.com">sailorgrift.com</a>. Connected them with a webring. Redesigned <a href="https://benaskins.github.com">benaskins.github.com</a> as a minimal business card with light/dark flip.</p>
-<h2>Platform hardening</h2>
-<p>Bumped Go from 1.26.0 to 1.26.1 across every axon module for stdlib vulnerability fixes. Ran security reviews on axon-auth, axon-chat, axon-gate, axon-lens, and axon-memo. Added <code>context.Context</code> to store interfaces. Committed to event sourcing in axon-chat and axon-task. Shipped a PostgreSQL store with pgvector support for axon-memo. Merged seven PRs into aurelia covering log line byte limits, env var interpolation in service specs, a goroutine leak in the adopted process monitor, a debounce timer race condition, and documentation for non-Go services, grace periods, and the PORT env var contract.</p>
-<p>There's a narrative right now that agents produce slop — that the volume comes at the cost of substance. I don't think that's inherent to the tool. An agent in careless hands produces careless work, the same way any power tool does. But in practiced hands — hands that know what good looks like, that review every diff, that insist on tests and security audits and clean interfaces — agents are a multiplier on craft, not a substitute for it. This week I shipped a publishing pipeline, a browser-based synthesiser, five websites, and a platform-wide security hardening pass. I didn't review every line — through process, practice, and tooling I've established a relationship where the agent can be trusted to operate with direction rather than oversight. That trust isn't blind. It's earned through CI, infrastructure, and the kind of working relationship you build over time with any good collaborator. Agents didn't lower the bar. They let me clear it more often.</p>
-</div>
+<div class="body long-form"></div>
 
 </article>
 </main>
