@@ -4,12 +4,12 @@
     <title>Generative Plane</title>
     <link>https://generativeplane.com</link>
     <description>Posts by Benjamin Askins</description>
-    <lastBuildDate>Mon, 16 Mar 2026 04:51:36 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 16 Mar 2026 04:53:16 +0000</lastBuildDate>
     <item>
       <title>Imago: Building a Terminal Workflow for Conversational Writing</title>
       <link>https://generativeplane.com/posts/3e315fdd-ae90-4a4e-8fc0-0b24f309c331</link>
       <description>I built a TUI that interviews me and writes blog posts. Two phases — conversational interview, then section-by-section editing — running entirely on local LLMs.</description>
-      <pubDate>Mon, 16 Mar 2026 04:49:56 +0000</pubDate>
+      <pubDate>Mon, 16 Mar 2026 04:51:42 +0000</pubDate>
       <guid>https://generativeplane.com/posts/3e315fdd-ae90-4a4e-8fc0-0b24f309c331</guid>
     </item>
     <item>
