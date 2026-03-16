@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Imago: Building a Terminal Workflow for Conversational Writing — Generative Plane</title>
+<meta property="og:title" content="Imago: Building a Terminal Workflow for Conversational Writing">
+<meta property="og:description" content="I built a TUI that interviews me and writes blog posts. Two phases — conversational interview, then section-by-section editing — running entirely on local LLMs.">
+<meta property="og:url" content="https://generativeplane.com/posts/3e315fdd-ae90-4a4e-8fc0-0b24f309c331">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+<div class="wordmark"><a href="/">Generative Plane</a></div>
+</header>
+<hr class="divider">
+<main>
+<article>
+<time datetime="2026-03-16T04:49:56Z">2026-03-16</time>
+<h2>Imago: Building a Terminal Workflow for Conversational Writing</h2>
+<div class="body long-form"><h1>Imago: Building a Terminal Workflow for Conversational Writing</h1>
+<h2>The Friction Point</h2>
+<p>I was already writing blog posts using a conversational loop with claude and claude code, but the chat interface became a bottleneck. Every time I needed to review or revise a section, I had to flip between a text editor and the chat window. This wasn’t just a minor annoyance—it created a cognitive loop: copy text, switch contexts, paste, wait for a response, repeat. The draft would disappear from view during generative steps, breaking the flow. The problem wasn’t the tools themselves, but the lack of a single-window workflow that could handle both iterative dialogue and sequential editing.</p>
+<h2>The Terminal as a State Machine</h2>
+<p>The solution was to build a TUI that maps directly to my process. Imago uses <a href="https://github.com/charmbracelet/bubbletea">Bubble Tea</a> to create distinct modes:</p>
+<ul>
+<li><strong>Interview phase</strong>: Axon tools drive conversational drafting.</li>
+<li><strong>Review phase</strong>: Markdown sections are edited in-place, one at a time.</li>
+<li><strong>Publishing</strong>: Synd API integration lives in the same interface.</li>
+</ul>
+<p>The TUI is structured as a state machine tailored for writing workflows, with the terminal serving as a single source of truth. This avoids the fragmentation of browser-based tools. For example, <code>tui.New()</code> initializes the interface with clear transitions between modes, while <code>internal/session</code> handles file persistence without exposing it to the user.</p>
+<h2>Local LLMs and Predictable Latency</h2>
+<p>I chose <a href="https://ollama.com/">Ollama</a> for local inference because it avoids API rate limits, reduces token costs by using lightweight models for routine tasks, and keeps all data private on my machine until publication. The <code>axon-talk/ollama</code> adapter lets me switch models via environment variables—no code changes needed. This matters: when writing, I want to offload simple tasks to small models (like <code>llama3:8b</code>) while reserving larger models for critical thinking. The local setup also ensures no conversation fragments escape to external services, and all interactions remain available for future model training.</p>
+<p>The <code>main.go</code> file shows how this works:</p>
+<pre><code class="language-go">client, err := ollama.NewClientFromEnvironment()
+</code></pre>
+<p>It’s a small line, but it decouples the tool from any single model or service while maintaining full control over data flow.</p>
+<h2>Modular Tooling Without Coupling</h2>
+<p>Imago’s toolset is assembled from discrete components:</p>
+<ul>
+<li><code>axon-tool</code> definitions for search, publishing, and infrastructure queries.</li>
+<li>Environment-bound services like Synd, SearXNG, and <code>axon-memo</code>.</li>
+<li>Filesystem-based session storage.</li>
+</ul>
+<p>This modularity is enforced by the Go module structure. The CLI layer (<code>cmd/imago</code>) has no direct dependency on the TUI or session logic. Everything is injected at runtime via <code>tools.All(cfg)</code>, which builds a capabilities matrix from environment variables and config files.</p>
+<h2>Memory That Lasts Beyond a Session</h2>
+<p>The <code>axon-memo</code> dependency tracks editorial voice across sessions using the <code>imago</code> agent slug. This includes maintaining context between interview phases and revision cycles, as well as supporting the development of the &quot;journalist&quot; persona over time. By retaining state between sessions, the agent enables Imago to refine its voice through persistent memory, avoiding the &quot;reset&quot; problem of stateless chat interfaces. When pausing a draft, the retained state allows the persona to evolve cohesively, ensuring continuity in tone and perspective.</p>
+<h2>What It Is, and Isn’t</h2>
+<p>Imago isn’t a general-purpose editor. It’s a narrowly scoped solution for a specific workflow—one that required a terminal-native tool to feel seamless. The codebase reflects this: strict separation between <code>internal/tui</code>, <code>internal/session</code>, and <code>tools/</code> ensures no component holds more responsibility than necessary.</p>
+<p>The result is a workflow that eliminates manual text shuffling, keeps the draft visible during generative steps, and uses conventional Go patterns (env config, dependency injection) for maintainability. It’s not perfect, but it works for what it was built to do.</p>
+<h2>What’s Next?</h2>
+<p>Future iterations may explore tighter markdown tooling integration or expanded memory capabilities. But the core principle remains: the interface should align with the cognitive task, not the other way around. For now, Imago does what it was designed to do—collapse a fractured workflow into a single window, with no more context switching than necessary.</p>
+</div>
+
+</article>
+</main>
+<hr class="divider">
+<footer>
+<div class="lbl">Generative Plane</div>
+<div class="lbl"><a href="/">all posts</a></div>
+</footer>
+
+<nav class="webring">
+  <a class="webring-prev" href="#">&#8592;</a>
+  <span class="webring-name">generativeplane</span>
+  <a class="webring-next" href="#">&#8594;</a>
+</nav>
+<script>
+(function() {
+  var ring = [
+    { name: 'benjaminaskins', url: 'https://benjaminaskins.com' },
+    { name: 'genlevel', url: 'https://genlevel.com' },
+    { name: 'generativeplane', url: 'https://generativeplane.com' },
+    { name: 'isitconscious', url: 'https://isitconscious.xyz' }
+  ];
+  var host = location.hostname.replace('www.', '');
+  var idx = ring.findIndex(function(s) { return host.indexOf(s.name) !== -1; });
+  if (idx === -1) idx = 0;
+  var prev = ring[(idx - 1 + ring.length) % ring.length];
+  var next = ring[(idx + 1) % ring.length];
+  var nav = document.querySelector('.webring');
+  nav.querySelector('.webring-prev').href = prev.url;
+  nav.querySelector('.webring-prev').textContent = '\u2190 ' + prev.name;
+  nav.querySelector('.webring-next').href = next.url;
+  nav.querySelector('.webring-next').textContent = next.name + ' \u2192';
+  nav.querySelector('.webring-name').textContent = ring[idx].name;
+})();
+</script>
+
+</body>
+</html>
