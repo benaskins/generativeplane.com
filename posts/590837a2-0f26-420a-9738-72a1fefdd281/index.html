@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Week notes: March 16–20 — Generative Plane</title>
+<meta property="og:title" content="Week notes: March 16–20">
+<meta property="og:description" content="222 commits, 35 repos, two nodes talking to each other, a benchmark harness, a website for humans and agents, a Prolog ontology, and a synth stripped to a heartbeat.">
+<meta property="og:url" content="https://generativeplane.com/posts/590837a2-0f26-420a-9738-72a1fefdd281">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<header>
+<div class="wordmark"><a href="/">Generative Plane</a></div>
+</header>
+<hr class="divider">
+<main>
+<article>
+<time datetime="2026-03-20T13:54:46Z">2026-03-20</time>
+<h2>Week notes: March 16–20</h2>
+<div class="body long-form"><h1>Week notes: March 16–20</h1>
+<p>I started my career on MVS mainframes, programming PL/I and dispatching jobs with JCL. RACF for auth, strong guardrails, a formal release management system whose name I can't quite recall. PL/I was a genuinely capable language — IBM designed it to unify the best of FORTRAN, COBOL, and ALGOL, arguably the first attempt at a universal third-generation language. I think about that lineage more than I expected to. Service orchestration, workspace management, publishing pipelines — the instincts are the same, just expressed in a different era's tools. This week I shipped a lot of that instinct as running code.</p>
+<h2>Aurelia goes multi-node</h2>
+<p>I've been working from a laptop — limen — and needed to operate hestia (a Mac Studio) remotely without SSH. So I built cluster mode into aurelia: a peer registry with liveness checks, daemon-to-daemon communication, cluster API endpoints, multi-host health checks and routing, and a <code>--node</code> flag on the CLI. It's 100% functioning. I can run <code>aurelia status --node hestia</code> from the laptop and get a live view of 25 services across two machines. The new <code>limen-core-infrastructure</code> [private] repo holds the node configuration.</p>
+<p>There's also a new <code>remote</code> service type for hook-based cloud workloads, which brings the Cloudflare workers into aurelia's service model alongside everything else.</p>
+<h2>The evaluation pipeline</h2>
+<p>Two things drove this work: I need to fetch, read, and summarise content for research, and I'm constrained by local GPU. The Mac Studio is capable, but scheduling inference is challenging and there's a hard ceiling on tokens per second.</p>
+<p>The new <code>axon-wire</code> module routes HTTP requests through a Cloudflare proxy, and <code>axon-talk</code> got a full Anthropic Messages API adapter with streaming support — five version bumps in one week, from v0.2.3 to v0.4.0. The important work is in the normalization layer: coercing types, catching tool calls that leak into agent responses, and normalizing function signatures against pre-defined schemas.</p>
+<p>To measure the impact, I built <code>axon-eval</code> — a benchmark harness using data from the Berkeley Function Calling Leaderboard. Our overall score went from 85% to over 90% with the axon-talk client's normalization. It's our own benchmark using BFCL data, but it establishes a baseline for evaluating other models. The most effective model for tool selection available through Cloudflare so far is Qwen 3.3 30B — we haven't evaluated GLM yet, and we've been cautious about the cost of evaluation runs against Anthropic models.</p>
+<p>Next week I'm exploring diffusion LLMs for local inference to see if I can extract more tokens per second without losing accuracy. The harness still has work to do — particularly around over-eager tool selection, where the score drops.</p>
+<h2>getlamina.ai and the documentation sweep</h2>
+<p>I wanted somewhere to explain lamina at a high level that wasn't just a GitHub page. The site is designed for two audiences: humans get an interactive dependency graph and module graphics in the browser; agents get HTML frontmatter and a clear direction to AGENTS.md. Ideally, you point your agent at getlamina.ai and it learns what to do.</p>
+<p>This isn't engagement-baiting hype. Lamina is built for hobby compute, scaling out from a sovereign environment. But the axon modules are designed like lego — small, versioned Go packages that each do one thing. An agent that understands the dependency graph can compose them into applications.</p>
+<p>The documentation sweep across almost every axon module — CLAUDE.md, AGENTS.md, package docs, READMEs — was preparation for this launch. Getting the house in order before opening the front door. Everything I'm building has an agent-first mentality. You'd be silly not to in the current environment.</p>
+<p>The design was a labour of love. I wanted it to look like a 1980s product catalog with technical details and an almost blueprint vibe — brutalist, precise. The Designers Republic has inspired me since I was a record-collecting teenager, and funnily enough, this week I picked up an old tune by Krush out of Sheffield with a beautifully designed TDR cover, just as I'd been developing this look. I iterated on it in Claude Code with no plugins or skills — I know what I like, I know what I was chasing, and we got there. It might change next week, but I'm having fun with it.</p>
+<h2>Imago</h2>
+<p>The syndication pipeline from last week was working, but the front end of the process was still ad hoc. I didn't have a clear view of a draft before publishing, and I wanted deterministic input into the weekly roundup. Imago formalises that — a terminal app that structures the interview, generates a draft, and lets me review and edit before anything ships. Keyboard shortcuts, animated spinner during generation, branding that stays visible during tool calls, the full Bubble Tea treatment. Tagged v0.1.0. This week's post is the first generated by a new imago feature — the tool writing about itself.</p>
+<p>The interview-based approach isn't new — I've been using dialog-driven generation for over a year. I'd just never built the harness to formalise the deterministic portions. Imago codifies a proven process; it doesn't invent one.</p>
+<h2>abhidharma.pl</h2>
+<p>I keep arguing with people on Threads about how LLMs are not conscious or sentient, so I went back to my comp sci roots. Prolog is a language built for representing logical ontologies with clear declarations and methods for establishing truth. I have a background in philosophy and studied Buddhist texts for a number of years. The Gelugpa tradition establishes a simple framework — verifiable through practice and meditation — for establishing sentience, and at best LLMs satisfy one aspect.</p>
+<p>The site has a module browser with nine collapsible sections, a REPL with query execution and history, and it's wired into the webring. It's not quite troll-bait — almost a troll shield, to remind myself what I believe and not get drawn into baity hype-chasing arguments.</p>
+<h2>musicbox</h2>
+<p>Last week I shipped the browser synth. This week I tried to build up — dub stabs, a granular engine, hi-hats — and it sounded like shit. I do my best work building up incrementally, and I'd skipped the foundation. So I stripped it all back to the frequency of a human heartbeat: a bare kick at 1.2 Hz, 72 BPM, with polyrhythmic pulse ratios growing from that base. I haven't revisited it since — getlamina.ai took priority — but the seed is better now.</p>
+<hr>
+<p>222 commits, 35 repos, two new infrastructure nodes talking to each other, a benchmark harness that proved a 5-point lift in tool-use accuracy, a website designed to be read by both humans and agents, a Prolog ontology for arguing about consciousness, and a synth stripped back to a heartbeat. The thing that connects all of it is the same thing that connected PL/I and JCL forty years ago: structured operations, formal interfaces, guardrails that let you move fast because the system catches what you miss. The tools changed. The instinct didn't.</p>
+</div>
+
+</article>
+</main>
+<hr class="divider">
+<footer>
+<div class="lbl">Generative Plane</div>
+<div class="lbl"><a href="/">all posts</a></div>
+</footer>
+
+<nav class="webring">
+  <a class="webring-prev" href="#">&#8592;</a>
+  <span class="webring-name">generativeplane</span>
+  <a class="webring-next" href="#">&#8594;</a>
+</nav>
+<script>
+(function() {
+  var ring = [
+    { name: 'benjaminaskins', url: 'https://benjaminaskins.com' },
+    { name: 'genlevel', url: 'https://genlevel.com' },
+    { name: 'generativeplane', url: 'https://generativeplane.com' },
+    { name: 'isitconscious', url: 'https://isitconscious.xyz' }
+  ];
+  var host = location.hostname.replace('www.', '');
+  var idx = ring.findIndex(function(s) { return host.indexOf(s.name) !== -1; });
+  if (idx === -1) idx = 0;
+  var prev = ring[(idx - 1 + ring.length) % ring.length];
+  var next = ring[(idx + 1) % ring.length];
+  var nav = document.querySelector('.webring');
+  nav.querySelector('.webring-prev').href = prev.url;
+  nav.querySelector('.webring-prev').textContent = '\u2190 ' + prev.name;
+  nav.querySelector('.webring-next').href = next.url;
+  nav.querySelector('.webring-next').textContent = next.name + ' \u2192';
+  nav.querySelector('.webring-name').textContent = ring[idx].name;
+})();
+</script>
+
+</body>
+</html>
