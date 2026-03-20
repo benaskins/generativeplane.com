@@ -30,9 +30,9 @@
 body {
   background: var(--bg);
   color: var(--fg);
-  font-family: 'Inter', sans-serif;
-  font-weight: 300;
-  font-size: 16px;
+  font-family: 'Space Mono', monospace;
+  font-weight: 400;
+  font-size: 14px;
   line-height: 1.7;
   min-height: 100vh;
   overflow-x: hidden;
@@ -152,6 +152,22 @@ article {
 
 article:last-child { border-bottom: none; padding-bottom: 0; }
 
+.article-ghost {
+  position: absolute;
+  font-family: 'Archivo Black', sans-serif;
+  font-size: 5rem;
+  line-height: 0.85;
+  color: var(--ghost);
+  text-transform: uppercase;
+  pointer-events: none;
+  white-space: nowrap;
+  letter-spacing: -0.04em;
+  top: -0.2em;
+  z-index: 0;
+}
+.article-ghost-right { right: -0.5em; }
+.article-ghost-left { left: -0.5em; }
+
 article time {
   display: block;
   font-family: 'Space Mono', monospace;
@@ -178,7 +194,7 @@ article h2 a {
 article h2 a:hover { color: var(--accent); text-decoration: none; }
 
 article p, article .abstract {
-  font-size: 14px;
+  font-size: 13px;
   line-height: 1.6;
   color: var(--muted);
 }
@@ -220,7 +236,7 @@ article p, article .abstract {
 }
 
 .long-form p {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.75;
   color: var(--muted);
   margin-bottom: 16px;
@@ -239,7 +255,7 @@ article p, article .abstract {
 }
 
 .long-form li {
-  font-size: 15px;
+  font-size: 14px;
   line-height: 1.75;
   margin-bottom: 8px;
 }
@@ -313,6 +329,7 @@ footer a:hover { color: var(--fg); border-color: var(--fg); text-decoration: non
 @media (max-width: 480px) {
   header { padding: 32px 20px 20px; }
   .ghost-text { font-size: 6rem; }
+  .article-ghost { font-size: 3rem; }
   main { padding: 32px 20px; }
   footer { padding: 20px 20px 32px; flex-direction: column; gap: 8px; }
 }
