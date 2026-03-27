@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/style.css?v=a37fc54e51bf">
+<link rel="stylesheet" href="/style.css?v=7508558124d5">
 </head>
 <body>
 <header>
@@ -65,39 +65,25 @@
 <div class="lbl"><a href="/">all posts</a></div>
 </footer>
 
-<nav class="webring">
-  <a class="webring-prev" href="#">&#8592;</a>
-  <span class="webring-name">generativeplane</span>
-  <a class="webring-next" href="#">&#8594;</a>
-</nav>
+
+<button class="fixed-control fixed-control-left" id="themeToggle">dark</button>
 <script>
 (function() {
-  var ring = [
-    { name: 'benjaminaskins', url: 'https://benjaminaskins.com' },
-    { name: 'genlevel', url: 'https://genlevel.com' },
-    { name: 'generativeplane', url: 'https://generativeplane.com' },
-    { name: 'isitconscious', url: 'https://isitconscious.xyz' }
-  ];
-  var host = location.hostname.replace('www.', '');
-  var idx = ring.findIndex(function(s) { return host.indexOf(s.name) !== -1; });
-  if (idx === -1) idx = 0;
-  var prev = ring[(idx - 1 + ring.length) % ring.length];
-  var next = ring[(idx + 1) % ring.length];
-  var nav = document.querySelector('.webring');
-  nav.querySelector('.webring-prev').href = prev.url;
-  nav.querySelector('.webring-prev').textContent = '\u2190 ' + prev.name;
-  nav.querySelector('.webring-next').href = next.url;
-  nav.querySelector('.webring-next').textContent = next.name + ' \u2192';
-  nav.querySelector('.webring-name').textContent = ring[idx].name;
+  var stored = localStorage.getItem('theme');
+  var system = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  var theme = stored || system;
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.textContent = theme;
+    btn.addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.textContent = next;
+    });
+  }
 })();
-</script>
-
-
-
-<script async src="https://plausible.io/js/pa-cqaMBqB2zSgnB0-OvD7lj.js"></script>
-<script>
-  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
-  plausible.init()
 </script>
 
 </body>
