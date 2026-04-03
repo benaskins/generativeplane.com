@@ -26,7 +26,7 @@
 <hr class="divider">
 <main>
 <article>
-<time datetime="2026-03-13T10:56:39Z">2026-03-13</time>
+<time datetime="2026-03-13T22:02:18Z">2026-03-13</time>
 
 <div class="body long-form"><p>👋 Hi, I'm Ben. I've spent most of my recent career at Block working on Infrastructure and Developer Experience. I haven't actively blogged in almost 15 years, but I'd like to start writing again — about what I'm building, how I'm using LLMs, and the occasional philosophical post. These days I'm building out local inference and generalised compute on a Mac Studio, following privacy and personal data sovereignty principles. So naturally the first thing I needed was a way to publish.</p>
 <p>I wanted a simple publishing workflow: write a post, review it, publish to my own site, and syndicate copies to Bluesky and Mastodon. No CMS, no third-party service, just a CLI tool backed by event sourcing and a static site.</p>
@@ -37,12 +37,12 @@
 <h2>Event sourcing as the foundation</h2>
 <p>All state changes are events appended to an immutable log. The core interface from <a href="https://github.com/benaskins/axon-fact">axon-fact</a>:</p>
 <pre><code class="language-go">type EventStore interface {
-    Append(ctx context.Context, stream string, events []Event) error
-    Load(ctx context.Context, stream string) ([]Event, error)
+   Append(ctx context.Context, stream string, events []Event) error
+   Load(ctx context.Context, stream string) ([]Event, error)
 }
 
 type Projector interface {
-    Handle(ctx context.Context, event Event) error
+   Handle(ctx context.Context, event Event) error
 }
 </code></pre>
 <p>An <code>Event</code> is a struct with a type string and a JSON payload. A <code>Projector</code> processes events to build read models. Projectors run synchronously within <code>Append</code>, so the caller sees the projected state immediately.</p>
@@ -64,9 +64,9 @@ store.Syndicate(ctx, postID, synd.Bluesky, remoteID, remoteURL)
 <h2>Static site generation</h2>
 <p>The site builder takes a list of posts and writes static HTML — an index page, individual post pages, an RSS feed, and a CSS file. Go's <code>html/template</code> does the rendering. The output goes to a git repo that's configured with GitHub Pages.</p>
 <pre><code class="language-go">builder := synd.NewSiteBuilder(synd.SiteConfig{
-    Title:   &quot;Generative Plane&quot;,
-    BaseURL: &quot;https://generativeplane.com&quot;,
-    Author:  &quot;Benjamin Askins&quot;,
+   Title:   &quot;Generative Plane&quot;,
+   BaseURL: &quot;https://generativeplane.com&quot;,
+   Author:  &quot;Benjamin Askins&quot;,
 })
 builder.Build(posts, siteDir)
 synd.GitPublish(siteDir, &quot;post: hello world&quot;)

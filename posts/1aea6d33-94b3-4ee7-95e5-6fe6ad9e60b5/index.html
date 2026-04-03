@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Week notes: 27 March – 3 April 2026 — Generative Plane</title>
+<meta property="og:title" content="Week notes: 27 March – 3 April 2026">
+<meta property="og:description" content="There&#39;s a moment in any bootstrapping process where the thing you&#39;re building starts building things of its own. You expected it eventually, but not this week. This week I sat down to run some model evaluations and ended up watching an agent scaffold another agent from a PRD, ...">
+<meta property="og:url" content="https://generativeplane.com/posts/1aea6d33-94b3-4ee7-95e5-6fe6ad9e60b5">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/style.css?v=7508558124d5">
+</head>
+<body>
+<header>
+<div class="ghost-text">Week notes: 27 March – 3 April 2026</div>
+<div class="header-meta">
+<span class="corner-mark">GP//2026</span>
+<span class="corner-mark">Benjamin Askins</span>
+</div>
+<div class="wordmark"><a href="/">Generative Plane</a></div>
+<div class="accent-stripe"></div>
+</header>
+<hr class="divider">
+<main>
+<article>
+<time datetime="2026-04-03T09:48:23Z">2026-04-03</time>
+
+<div class="body long-form"><h1>Week notes: 27 March – 3 April 2026</h1>
+<p>There's a moment in any bootstrapping process where the thing you're building starts building things of its own. You expected it eventually, but not this week. This week I sat down to run some model evaluations and ended up watching an agent scaffold another agent from a PRD, then that agent built itself out over fifteen commits while I watched. The plan for the week dissolved somewhere around Tuesday and something better took its place.</p>
+<h2>The factory that built itself</h2>
+<p>The week was supposed to be about evaluation pipelines, finding the right balance of tool call predictability, tok/s, and cost per million tokens across local and hosted models. <a href="https://github.com/benaskins/axon-eval">axon-eval</a> already had the evaluation framework. For local serving, the focus was BFCL accuracy and tok/s: <a href="https://huggingface.co/Qwen">Qwen 3.5 122B</a> hit the sweet spot at 91.1% on BFCL. To get the best throughput without losing accuracy, I used an autotuning approach inspired by <a href="https://github.com/karpathy/autoresearch">Karpathy's autoresearch</a>. A tool called autotune (namechecking <a href="https://www.celemony.com/en/melodyne">Melodyne</a>, naturally) that tunes a local model's slots, workers, batch sizes, and cache parameters until you've squeezed out every token per second the hardware will give you. For hosted models (Anthropic, OpenRouter), the evaluation was about optimising cost per million tokens for equivalent capability.</p>
+<p>With the model dialled in, <a href="https://github.com/benaskins/luthier">luthier</a> was already able to turn a PRD into a build plan. So we prepared a PRD for luthier itself and ran multiple tests to see if it could scaffold itself from a spec and a catalogue of <a href="https://github.com/benaskins/axon">axon</a> components. It worked. After a few iterations we wrote a PRD for <a href="https://github.com/benaskins/maestro">maestro</a>, a new agent that takes a plan from luthier and turns the scaffold into a working application. Luthier took that PRD and scaffolded a working agent: essentially a clone of the patterns it already uses, all axon components glued together, but with job-appropriate tools. The scaffold included an instruction for Claude to bootstrap maestro with read, write, and exec tools, then hand it its own PRD so maestro could complete the build by adding the remaining capabilities.</p>
+<p>Then I sat there and watched it happen. Fifteen commits where it built out the remaining capabilities it needed to assemble axon apps. Then it was extracted into its own <a href="https://github.com/benaskins/maestro">repo</a> with further refinements.</p>
+<p>Right now maestro delegates coding work to <code>claude -p</code> sessions running Sonnet with a constrained toolset and a system prompt. That CLAUDE.md should really be AGENTS.md. Eventually we'll have a coder agent talking to something like a Qwen coder model. The architecture is designed for model switching: need an expert security review? Find the best model with the right prompt for that task. Need a routine CRUD scaffold? Use something cheaper and faster.</p>
+<p>I realised the agents needed somewhere to work. They were dumping output into wherever they happened to have been started, so we came up with a factory-floor analogy. A folder with a workbench where agents could set up builds and work on them. That led to looking for a suitable domain name, and we found werkhaus.dev. Werkhaus became the factory name. I also registered hauswerk.audio, because how could I not.</p>
+<p>The build plan has six phases. Phases 0 and 1 are complete. The factory built axon-base and axon-lore — two real components — from PRDs, automatically. I don't have telemetry or the ledger wired up yet to measure output quality systematically. We're still in the &quot;make it work&quot; phase. But the unit economics are already clear: an MVP for just over a dollar in token spend, running Qwen 3.5 122B locally. The economics when using models from smaller labs are really... interesting.</p>
+<h2>Agents don't get SSH</h2>
+<p>Claude kept reaching for SSH, and I don't want agents hopping around my cluster. So <a href="https://github.com/benaskins/aurelia">aurelia</a> went from v0.3.1 to v0.4.0 this week with a full mTLS PKI system: cert issuance via <a href="https://openbao.org">OpenBao</a>, automatic renewal in the peer liveness loop, TLS hot reload via GetCertificate callbacks, and a new <code>aurelia cert</code> command for certificate management. That's over four thousand lines of new code to give agents a secure communication channel that isn't a shell session.</p>
+<p>The security architecture across the three-node cluster is deliberate. Adyton (Mac Mini) is the secrets authority. Only a human can SSH to adyton and use <code>aurelia set secret</code> to store a new secret. Agents can <em>use</em> secrets through aurelia's secure channel but never <em>see</em> them. No secret in a log, no secret on disk where an agent might stumble across it while roaming the filesystem. Limen (MacBook Pro) is now mTLS-enabled and aligned with the cluster conventions, and hestia (server) got backup alerting via Signal, postgres backup as an aurelia-managed service, and a switch to <a href="https://github.com/vllm-project/vllm">vllm-mlx</a> with Qwen 3.5 27B for infrastructure models.</p>
+<p>This connects directly to the maestro design: constrained toolsets, scoped permissions, agents that can do their job without being handed the keys to the kingdom.</p>
+<h2>A type for every concept</h2>
+<p>I've been so focused on plumbing and infrastructure that I hadn't established any patterns for writing business rules. Every software developer needs a way to express them, and I wanted something that felt better than longhand imperative Go while still being well and truly Go.</p>
+<p><a href="https://github.com/benaskins/axon-rule">axon-rule</a> started as a specification library but ended up focused on types for expressing business rules and combinators for wiring them up. The API went through several rapid iterations in a single week. <code>Spec</code> became <code>Rule</code>, <code>IsSatisfiedBy</code> became <code>Check</code>, <code>Result</code> became <code>Violations</code>, the context type widened from <code>map[string]any</code> to <code>any</code>. That was me trying to build something with it, working through the ergonomics with Claude. Every time I saw a string I asked &quot;what's that?&quot; until we landed on a type. The same thing I'd do if I was pairing with another engineer. You end up with violation codes derived from context type names instead of magic strings.</p>
+<p>The pattern was overdue. <a href="https://github.com/benaskins/axon-book">axon-book</a> got journal entry validation with typed <code>BalanceMismatch</code> contexts. <a href="https://github.com/benaskins/axon-synd">axon-synd</a> got post lifecycle rules. <a href="https://github.com/benaskins/axon-gate">axon-gate</a> got approval resolution rules. All replacing ad-hoc imperative checks.</p>
+<h2>Making the pieces smaller</h2>
+<p>A refactoring wave rolled across the axon modules this week. The <a href="https://ollama.ai">Ollama</a> adapter got deprecated and replaced with an OpenAI-compatible adapter across <a href="https://github.com/benaskins/lamina">lamina</a>, <a href="https://github.com/benaskins/vita">vita</a>, <a href="https://github.com/benaskins/imago">imago</a>, and <a href="https://github.com/benaskins/axon-talk">axon-talk</a>. We'd proved that vllm-mlx worked well for local needs, so the heavy dependency could go. Packages got extracted: <a href="https://github.com/benaskins/axon-push">axon-push</a> from axon's SSE infrastructure, <a href="https://github.com/benaskins/axon-tape">axon-tape</a> from axon/stream. And <code>luthier.yaml</code> manifests were added to nearly every axon module.</p>
+<p>The manifests are what let luthier understand the component catalogue. Every axon module now describes itself in a way the factory can consume. But the real point of the refactoring is size. Most axon primitives are now under 1,000 lines of Go. Small modules don't bloat context windows, and they make the factory's output more predictable. An LLM can hold an entire module in context, understand what it does, and compose it with others. LLMs love patterns. A catalogue of small, consistent components that all follow the same conventions is exactly the kind of thing they're good at reasoning about.</p>
+<h2>The rest</h2>
+<p>We're watching <a href="https://github.com/michaelneale/mesh-llm">mesh-llm</a> closely, thinking about how we could offer factory floor services across a mesh. Really cool to see projects like this coming from Michael Neale. It shipped a CPU-only Linux build, an autoupdater workflow, integration smoke tests, and five releases this week. Worth keeping an eye on.</p>
+<p><a href="https://github.com/benaskins/axon-chat">axon-chat</a> got a full React frontend rewrite: chat page, agent editor, task drawer, conversation management. Three releases. It's still very much a work in progress and probably flaky in ways I haven't found yet, but the bones are there.</p>
+<p>I also ran an experiment to see if the luthier pattern could scaffold non-axon apps. I pointed it at a known spec, a simple bookmarks app, and had it produce Rails and Phoenix versions. It worked well. The techniques luthier uses to compose axon components translated surprisingly directly to other frameworks. I don't have time to invest in that right now, but it confirmed something worth coming back to.</p>
+<hr>
+<p>Phase 4 of the werkhaus build plan assigns luthier work to the factory itself. That's the moment I keep coming back to: the factory improving its own toolmaker. We're not there yet. There are bugs, there's no telemetry, the ledger isn't wired up. But the pipeline is end-to-end: PRD in, scaffold out, build executed, output on the workbench. The interesting question isn't whether it works. It's what happens when the thing that builds your tools starts deciding which tools it needs.</p>
+</div>
+
+</article>
+</main>
+<hr class="divider">
+<footer>
+<div class="lbl">Generative Plane</div>
+<div class="lbl"><a href="/">all posts</a></div>
+</footer>
+
+
+<button class="fixed-control fixed-control-left" id="themeToggle">dark</button>
+<script>
+(function() {
+  var stored = localStorage.getItem('theme');
+  var system = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  var theme = stored || system;
+  document.documentElement.setAttribute('data-theme', theme);
+  var btn = document.getElementById('themeToggle');
+  if (btn) {
+    btn.textContent = theme;
+    btn.addEventListener('click', function() {
+      var next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+      btn.textContent = next;
+    });
+  }
+})();
+</script>
+
+</body>
+</html>
