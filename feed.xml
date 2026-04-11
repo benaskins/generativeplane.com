@@ -4,12 +4,19 @@
     <title>Generative Plane</title>
     <link>https://generativeplane.com</link>
     <description>Posts by Benjamin Askins</description>
-    <lastBuildDate>Fri, 03 Apr 2026 09:49:09 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 11 Apr 2026 02:18:31 +0000</lastBuildDate>
+    <item>
+      <title>Week notes: 3–10 April 2026</title>
+      <link>https://generativeplane.com/posts/91fb0d94-1256-4062-9a89-96e7efbd6f3a</link>
+      <description>You can&#39;t improve what you can&#39;t measure. But before you can measure, you have to build the instruments. This week was supposed to be about running the software factory and seeing what falls out. Instead it became about building the gauges, the traceability, the accounting —...</description>
+      <pubDate>Sat, 11 Apr 2026 02:17:29 +0000</pubDate>
+      <guid>https://generativeplane.com/posts/91fb0d94-1256-4062-9a89-96e7efbd6f3a</guid>
+    </item>
     <item>
       <title>Week notes: 27 March – 3 April 2026</title>
       <link>https://generativeplane.com/posts/1aea6d33-94b3-4ee7-95e5-6fe6ad9e60b5</link>
       <description>There&#39;s a moment in any bootstrapping process where the thing you&#39;re building starts building things of its own. You expected it eventually, but not this week. This week I sat down to run some model evaluations and ended up watching an agent scaffold another agent from a PRD, ...</description>
-      <pubDate>Fri, 03 Apr 2026 09:48:23 +0000</pubDate>
+      <pubDate>Fri, 03 Apr 2026 09:49:16 +0000</pubDate>
       <guid>https://generativeplane.com/posts/1aea6d33-94b3-4ee7-95e5-6fe6ad9e60b5</guid>
     </item>
     <item>
